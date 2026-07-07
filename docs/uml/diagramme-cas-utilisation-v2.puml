@@ -1,0 +1,47 @@
+@startuml diagramme-cas-utilisation
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam usecase {
+  BackgroundColor #FFF8EF
+  BorderColor #7A5C2E
+  ArrowColor Black
+}
+skinparam actor {
+  BackgroundColor #FFF8EF
+  BorderColor Black
+}
+skinparam rectangle {
+  BorderColor Black
+}
+
+actor "Administrateur" as admin
+
+rectangle "Lucky Wheel Management" {
+  usecase "S'authentifier" as UC0
+  usecase "Importer la liste\ndes participants" as UC1
+  usecase "Contrôler les doublons" as UC1a
+  usecase "Consulter la liste\ndes participants" as UC2
+  usecase "Gérer les cadeaux\n(ajouter, modifier, supprimer,\nactiver / désactiver)" as UC3
+  usecase "Lancer un tirage au sort\n(roue de la fortune)" as UC4
+  usecase "Consulter le\ntableau de bord" as UC5
+  usecase "Consulter l'historique\ndes gagnants" as UC6
+  usecase "Exporter les gagnants\nen Excel" as UC6a
+  usecase "Rechercher / filtrer\nles gagnants" as UC6b
+  
+}
+
+admin --> UC0
+admin --> UC1
+admin --> UC2
+admin --> UC3
+admin --> UC4
+admin --> UC5
+admin --> UC6
+
+UC1 ..> UC1a : <<include>>
+UC6a ..> UC6 : <<extend>>
+UC6b ..> UC6 : <<extend>>
+
+
+@enduml

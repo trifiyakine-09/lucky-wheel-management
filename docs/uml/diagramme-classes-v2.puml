@@ -1,0 +1,52 @@
+@startuml diagramme-classes-v2
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam classAttributeIconSize 0
+hide circle
+hide empty methods
+skinparam class {
+  BackgroundColor #FFF8EF
+  BorderColor #7A5C2E
+  ArrowColor Black
+}
+
+class Participant {
+  +id : bigint
+  +nom : string
+  +prenom : string
+  +telephone : string {unique}
+  +created_at : datetime
+}
+
+class Cadeau {
+  +id : bigint
+  +nom : string
+  +description : text
+  +quantite : int
+  +couleur : string
+  +actif : boolean
+  +created_at : datetime
+}
+
+class Gagnant {
+  +id : bigint
+  +participant_id : bigint {unique}
+  +cadeau_id : bigint
+  +user_id : bigint {nullable}
+  +created_at : datetime
+}
+
+class User {
+  +id : bigint
+  +name : string
+  +email : string {unique}
+  +password : string
+  +created_at : datetime
+}
+
+Participant "1" -- "0..1" Gagnant : remporte >
+Cadeau "1" -- "0..*" Gagnant : attribué via
+User "0..1" -- "0..*" Gagnant : lance >
+
+
+@enduml
