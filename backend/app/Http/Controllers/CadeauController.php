@@ -44,17 +44,17 @@ class CadeauController extends Controller
         return $cadeau;
     }
 
-    public function destroy(Cadeau $cadeau)
-    {
-        try {
-            $cadeau->delete();
-            return response()->json(['message' => 'Cadeau supprimé avec succès']);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'message' => 'Impossible de supprimer ce cadeau : il a déjà été attribué à un gagnant. Désactive-le plutôt.',
-            ], 409);
-        }
+public function destroy(Cadeau $cadeau)
+{
+    try {
+        $cadeau->delete();
+        return response()->json(['message' => 'Cadeau supprimé avec succès']);
+    } catch (\Illuminate\Database\QueryException $e) {
+        return response()->json([
+            'message' => 'Impossible de supprimer ce cadeau : il a déjà été attribué à un gagnant. Désactive-le plutôt.',
+        ], 409);
     }
+}
 
     public function toggle(Cadeau $cadeau)
     {

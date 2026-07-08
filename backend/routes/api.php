@@ -9,5 +9,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::get('/participants', fn () => Participant::all());
-Route::apiResource('cadeaux', CadeauController::class);
+Route::apiResource('cadeaux', CadeauController::class)->parameters(['cadeaux' => 'cadeau']);
 Route::patch('cadeaux/{cadeau}/toggle', [CadeauController::class, 'toggle']);
