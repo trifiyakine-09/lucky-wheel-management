@@ -1,0 +1,24 @@
+# Journal de bord — Mercredi 8 juillet 2026 (Jour 3)
+
+## Objectifs du jour
+- Finaliser et tester le CRUD des cadeaux
+- Développer l'import Excel/CSV des participants
+- Implémenter la logique du tirage au sort
+- Développer l'historique des gagnants et le tableau de bord
+
+## Réalisé
+- CadeauController complet (5 méthodes CRUD + toggle actif/inactif) créé et testé dans Postman
+- Bug de route model binding corrigé : le paramètre de route "cadeaux" généré automatiquement par Laravel ne correspondait pas au nom attendu dans le contrôleur (pluralisation anglaise appliquée à un mot français) → déclaration explicite du paramètre
+- ParticipantController : import Excel/CSV via PhpSpreadsheet, détection des doublons (téléphones existants pré-chargés en mémoire pour éviter le problème N+1), distinction importés/doublons/invalides
+- GagnantController : logique du tirage au sort (transaction DB, sélection aléatoire côté SQL avec exclusion des anciens gagnants, décrément atomique du stock de cadeaux)
+- Historique des gagnants : recherche, filtres par date, export Excel
+- DashboardController : statistiques globales de l'application
+- Mise à jour du chapitre 4 du rapport (LaTeX) avec l'ensemble des fonctionnalités back-end réalisées
+
+## Problèmes rencontrés & solutions
+- Suppression d'un cadeau : réponse "succès" mais ligne toujours présente en base → cause : paramètre de route mal nommé, résolu avec `->parameters(['cadeaux' => 'cadeau'])`
+- Installation de PhpSpreadsheet en échec, extension `zip` manquante → activée dans `php.ini`
+- Import de participants : ligne avec prénom vide non détectée comme invalide → ajout de `prenom` au contrôle de validation
+
+## À faire demain
+- Implémenter l'authentification à deux facteurs demandée par l'encadrant (connexion et mot de passe oublié via code de vérification)

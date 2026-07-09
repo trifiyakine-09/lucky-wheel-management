@@ -1,0 +1,22 @@
+# Journal de bord — Jeudi 9 juillet 2026 (Jour 4)
+
+## Objectifs du jour
+- Implémenter l'authentification à deux facteurs (2FA) : connexion et réinitialisation de mot de passe par code de vérification, envoyé par SMS et par email
+
+## Réalisé
+- Extension du schéma `users` : colonnes telephone, otp_code, otp_expires_at
+- Service OtpService dédié à la génération et l'envoi des codes de vérification
+- Intégration de Twilio pour l'envoi de SMS (compte d'essai gratuit, numéro personnel vérifié)
+- AuthController complet : login (mot de passe → OTP), verify-otp, forgot-password, reset-password, logout
+- Protection de toutes les routes métier par le middleware auth:sanctum, limitation de débit sur les routes d'authentification
+- Ajout du canal email en complément du SMS, via SMTP Gmail (mot de passe d'application)
+- Parcours d'authentification complet testé de bout en bout sur les deux canaux
+
+## Problèmes rencontrés & solutions
+- Migration ajoutant les colonnes telephone/otp jamais réellement appliquée → vérifiée et relancée via `php artisan migrate`
+- "Code invalide ou expiré" systématique malgré un code correctement reçu → cause : `$user->update([...])` ignore silencieusement les colonnes absentes de `$fillable` (otp_code, otp_expires_at) → résolu en écrivant les attributs directement (`$user->otp_code = ...; $user->save();`), qui contourne la protection mass assignment
+- `GET /api/dashboard` sans token plantait au lieu de renvoyer une 401 → Laravel tentait de rediriger vers une route nommée "login" non définie → ajout d'une route de secours
+- Page Google "Mots de passe des applications" introuvable → cause : langue du compte Google mal configurée → résolue en changeant la langue sur myaccount.google.com/language
+
+## À faire demain
+- Démarrer le Sprint 3 : initialisation du projet Angular, écran de connexion, puis la roue de la fortune animée

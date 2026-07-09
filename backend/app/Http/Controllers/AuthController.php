@@ -14,6 +14,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'canal' => 'nullable|in:email,sms',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -22,13 +23,16 @@ class AuthController extends Controller
             return response()->json(['message' => 'Identifiants incorrects.'], 401);
         }
 
-        if (!$user->telephone) {
+        $canal = $request->canal ?? 'email';
+
+        if ($canal === 'sms' && !$user->telephone) {
             return response()->json(['message' => 'Aucun numero de telephone associe a ce compte.'], 422);
         }
 
-        OtpService::generateAndSend($user);
+        OtpService::generateAndSend($user, $canal);
 
-        return response()->json(['message' => 'Code de verification envoye par SMS.']);
+        $label = $canal === 'sms' ? 'par SMS' : 'par email';
+        return response()->json(['message' => "Code de verification envoye {$label}."]);
     }
 
     public function verifyOtp(Request $request)
@@ -55,17 +59,22 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'canal' => 'nullable|in:email,sms',
+        ]);
 
         $user = User::where('email', $request->email)->first();
+        $canal = $request->canal ?? 'email';
 
-        if (!$user->telephone) {
+        if ($canal === 'sms' && !$user->telephone) {
             return response()->json(['message' => 'Aucun numero de telephone associe a ce compte.'], 422);
         }
 
-        OtpService::generateAndSend($user);
+        OtpService::generateAndSend($user, $canal);
 
-        return response()->json(['message' => 'Code de reinitialisation envoye par SMS.']);
+        $label = $canal === 'sms' ? 'par SMS' : 'par email';
+        return response()->json(['message' => "Code de reinitialisation envoye {$label}."]);
     }
 
     public function resetPassword(Request $request)
