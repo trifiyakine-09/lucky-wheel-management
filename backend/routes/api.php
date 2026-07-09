@@ -5,11 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Participant;
 use App\Http\Controllers\CadeauController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\GagnantController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+//{"nom": "Powerbank", "quantite": 10, "couleur": "#FFC107"}
 Route::apiResource('cadeaux', CadeauController::class)->parameters(['cadeaux' => 'cadeau']);
 Route::patch('cadeaux/{cadeau}/toggle', [CadeauController::class, 'toggle']);
 Route::get('participants', [ParticipantController::class, 'index']);
 Route::post('participants/import', [ParticipantController::class, 'import']);
+Route::post('tirages', [GagnantController::class, 'store']);
