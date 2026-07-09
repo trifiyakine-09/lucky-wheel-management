@@ -16,3 +16,5 @@ Route::patch('cadeaux/{cadeau}/toggle', [CadeauController::class, 'toggle']);
 Route::get('participants', [ParticipantController::class, 'index']);
 Route::post('participants/import', [ParticipantController::class, 'import']);
 Route::post('tirages', [GagnantController::class, 'store']);
+Route::get('gagnants', [GagnantController::class, 'index']);
+Route::get('gagnants/export', [GagnantController::class, 'export']);
