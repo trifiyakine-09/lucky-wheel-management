@@ -6,6 +6,7 @@ use App\Models\Participant;
 use App\Http\Controllers\CadeauController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GagnantController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,3 +19,4 @@ Route::post('participants/import', [ParticipantController::class, 'import']);
 Route::post('tirages', [GagnantController::class, 'store']);
 Route::get('gagnants', [GagnantController::class, 'index']);
 Route::get('gagnants/export', [GagnantController::class, 'export']);
+Route::get('dashboard', [DashboardController::class, 'index']);
