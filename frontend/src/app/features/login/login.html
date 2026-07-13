@@ -1,0 +1,112 @@
+<div class="login-page">
+  <div class="login-banner">
+    <div class="login-banner__logo">
+      <span class="login-banner__icon">🎡</span>
+      <span class="login-banner__text">LUCKY WHEEL</span>
+    </div>
+  </div>
+
+  <div class="login-body">
+    @if (step() === 'password') {
+      <h1>Bienvenue</h1>
+      <p class="login-body__subtitle">Espace administrateur</p>
+
+      @if (successMessage()) { <p class="login-form__success">{{ successMessage() }}</p> }
+
+      <div class="canal-switch">
+        <button type="button" [class.active]="canal() === 'email'" (click)="choisirCanal('email')">Email</button>
+        <button type="button" [class.active]="canal() === 'sms'" (click)="choisirCanal('sms')">SMS</button>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submitPassword()" class="login-form">
+        <div class="login-input">
+          <span class="login-input__icon">✉️</span>
+          <input type="email" formControlName="email" placeholder="Adresse email" />
+        </div>
+        <div class="login-input">
+          <span class="login-input__icon">🔒</span>
+          <input type="password" formControlName="password" placeholder="Mot de passe" />
+        </div>
+
+        <button type="button" class="link-forgot" (click)="switchToForgotPassword()">Mot de passe oublié ?</button>
+
+        @if (errorMessage()) { <p class="login-form__error">{{ errorMessage() }}</p> }
+
+        <button type="submit" class="btn-pill" [disabled]="loginForm.invalid || loading()">
+          {{ loading() ? 'Envoi en cours...' : 'Se connecter' }}
+        </button>
+      </form>
+    }
+
+    @if (step() === 'otp') {
+      <h1>Vérification</h1>
+      <p class="login-body__subtitle">Un code a été envoyé par {{ canal() === 'sms' ? 'SMS' : 'email' }}</p>
+
+      <form [formGroup]="otpForm" (ngSubmit)="submitOtp()" class="login-form">
+        <div class="login-input">
+          <span class="login-input__icon">🔑</span>
+          <input type="text" inputmode="numeric" maxlength="6" formControlName="otp" placeholder="Code à 6 chiffres" />
+        </div>
+
+        @if (errorMessage()) { <p class="login-form__error">{{ errorMessage() }}</p> }
+
+        <button type="submit" class="btn-pill" [disabled]="otpForm.invalid || loading()">
+          {{ loading() ? 'Vérification...' : 'Valider' }}
+        </button>
+      </form>
+    }
+
+    @if (step() === 'forgot-email') {
+      <h1>Mot de passe oublié</h1>
+      <p class="login-body__subtitle">Reçois un code pour réinitialiser ton mot de passe</p>
+
+      <div class="canal-switch">
+        <button type="button" [class.active]="canal() === 'email'" (click)="choisirCanal('email')">Email</button>
+        <button type="button" [class.active]="canal() === 'sms'" (click)="choisirCanal('sms')">SMS</button>
+      </div>
+
+      <form [formGroup]="forgotForm" (ngSubmit)="submitForgotEmail()" class="login-form">
+        <div class="login-input">
+          <span class="login-input__icon">✉️</span>
+          <input type="email" formControlName="email" placeholder="Adresse email" />
+        </div>
+
+        @if (errorMessage()) { <p class="login-form__error">{{ errorMessage() }}</p> }
+
+        <button type="submit" class="btn-pill" [disabled]="forgotForm.invalid || loading()">
+          {{ loading() ? 'Envoi en cours...' : 'Recevoir le code' }}
+        </button>
+      </form>
+
+      <button type="button" class="link-back" (click)="backToLogin()">← Retour à la connexion</button>
+    }
+
+    @if (step() === 'forgot-reset') {
+      <h1>Nouveau mot de passe</h1>
+      <p class="login-body__subtitle">Un code a été envoyé par {{ canal() === 'sms' ? 'SMS' : 'email' }}</p>
+
+      <form [formGroup]="resetForm" (ngSubmit)="submitReset()" class="login-form">
+        <div class="login-input">
+          <span class="login-input__icon">🔑</span>
+          <input type="text" inputmode="numeric" maxlength="6" formControlName="otp" placeholder="Code à 6 chiffres" />
+        </div>
+        <div class="login-input">
+          <span class="login-input__icon">🔒</span>
+          <input type="password" formControlName="password" placeholder="Nouveau mot de passe" />
+        </div>
+        <div class="login-input">
+          <span class="login-input__icon">🔒</span>
+          <input type="password" formControlName="password_confirmation" placeholder="Confirmer le mot de passe" />
+        </div>
+
+        @if (errorMessage()) { <p class="login-form__error">{{ errorMessage() }}</p> }
+
+        <button type="submit" class="btn-pill" [disabled]="resetForm.invalid || loading()">
+          {{ loading() ? 'Validation...' : 'Réinitialiser' }}
+        </button>
+      </form>
+
+      <button type="button" class="link-back" (click)="backToLogin()">← Retour à la connexion</button>
+    }
+  </div>
+</div>

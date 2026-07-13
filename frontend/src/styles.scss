@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --color-primary: #E4141E;
+  --color-primary-dark: #B80F17;
+  --color-accent: #FFC72C;
+  --color-accent-dark: #E0A800;
+  --color-surface: #FFFFFF;
+  --color-page: #F7F7F7;
+  --color-ink: #1A1A1A;
+  --color-muted: #8a8a8a;
+  --color-error: #B80F17;
+  --font-display: 'Baloo 2', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius-pill: 999px;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-body); background: var(--color-page); color: var(--color-ink); }
+h1, h2, h3 { font-family: var(--font-display); }
