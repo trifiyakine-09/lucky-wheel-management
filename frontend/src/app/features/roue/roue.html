@@ -1,0 +1,56 @@
+<div class="roue-page">
+  <h1>Roue de la fortune</h1>
+
+  @if (errorMessage(); as msg) {
+    <div class="wheel-error">
+      <p>{{ msg }}</p>
+      <button type="button" (click)="errorMessage.set(null)">✕</button>
+    </div>
+  }
+
+  @if (cadeauxActifs().length === 0) {
+    <p class="empty-state">Aucun cadeau actif avec du stock disponible. Ajoute ou active un cadeau pour lancer un tirage.</p>
+  } @else {
+    <div class="wheel-wrapper">
+      <div class="wheel-pointer"></div>
+      <svg class="wheel" viewBox="0 0 400 400"
+           [style.transform]="'rotate(' + rotation() + 'deg)'"
+           (transitionend)="onSpinEnd()">
+        @for (seg of segments(); track seg.cadeau.id) {
+          <path [attr.d]="seg.path" [attr.fill]="seg.fillColor" stroke="white" stroke-width="2" />
+          <text [attr.transform]="seg.labelTransform" [attr.fill]="seg.textColor" text-anchor="middle" class="wheel-label">
+            {{ seg.cadeau.nom }}
+          </text>
+        }
+        <circle cx="200" cy="200" r="28" fill="white" stroke="var(--color-primary)" stroke-width="4" />
+      </svg>
+    </div>
+
+    <button type="button" class="btn-pill wheel-launch" (click)="lancer()" [disabled]="spinning()">
+      {{ spinning() ? 'Ça tourne...' : 'Lancer le tirage' }}
+    </button>
+  }
+</div>
+
+@if (winner(); as w) {
+  <div class="confetti-layer">
+    @for (piece of confettiPieces(); track $index) {
+      <span class="confetti-piece"
+            [style.left.%]="piece.left"
+            [style.animation-delay.s]="piece.delay"
+            [style.background]="piece.color"
+            [style.transform]="'rotate(' + piece.rotate + 'deg)'"></span>
+    }
+  </div>
+
+  <div class="winner-modal-backdrop">
+    <div class="winner-modal">
+      <span class="winner-modal__icon">🎉</span>
+      <p class="winner-modal__label">Félicitations</p>
+      <h2>{{ w.participant.prenom }} {{ w.participant.nom }}</h2>
+      <p class="winner-modal__phone">{{ w.participant.telephone }}</p>
+      <div class="winner-modal__prize" [style.background]="w.cadeau.couleur || '#FFC72C'">{{ w.cadeau.nom }}</div>
+      <button type="button" class="btn-pill" (click)="fermerResultat()">Fermer</button>
+    </div>
+  </div>
+}

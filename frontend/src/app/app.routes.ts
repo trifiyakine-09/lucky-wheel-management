@@ -12,7 +12,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./features/coming-soon/coming-soon').then(m => m.ComingSoon), data: { title: 'Tableau de bord' } },
       { path: 'participants', loadComponent: () => import('./features/coming-soon/coming-soon').then(m => m.ComingSoon), data: { title: 'Participants' } },
       { path: 'cadeaux', loadComponent: () => import('./features/cadeaux/cadeaux').then(m => m.Cadeaux) },
-      { path: 'roue', loadComponent: () => import('./features/coming-soon/coming-soon').then(m => m.ComingSoon), data: { title: 'Roue de la fortune' } },
+      { path: 'roue', loadComponent: () => import('./features/roue/roue').then(m => m.Roue) },
       { path: 'historique', loadComponent: () => import('./features/coming-soon/coming-soon').then(m => m.ComingSoon), data: { title: 'Historique' } },
     ],
   },
