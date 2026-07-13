@@ -9,7 +9,7 @@ class Cadeau extends Model
     protected $table = 'cadeaux';
 
     protected $fillable = ['nom', 'description', 'quantite', 'couleur', 'actif'];
-
+    protected $casts = ['actif' => 'boolean'];
     public function gagnants()
     {
         return $this->hasMany(Gagnant::class);
