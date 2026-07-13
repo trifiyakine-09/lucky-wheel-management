@@ -1,0 +1,38 @@
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+.shell__header {
+  background: var(--color-primary);
+  display: flex; align-items: center; gap: 24px;
+  padding: 14px 28px;
+  flex-wrap: wrap;
+}
+
+.shell__brand { display: flex; align-items: center; gap: 8px; }
+.shell__brand-icon { font-size: 22px; }
+.shell__brand-text { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: white; letter-spacing: 0.5px; }
+
+.shell__nav {
+  display: flex; gap: 4px; flex: 1; flex-wrap: wrap;
+
+  a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-family: var(--font-body); font-weight: 600; font-size: 14px;
+    padding: 8px 14px; border-radius: var(--radius-pill);
+    transition: background 0.15s ease;
+
+    &:hover { background: rgba(255,255,255,0.1); }
+    &.active { background: var(--color-accent); color: var(--color-ink); }
+  }
+}
+
+.shell__logout {
+  background: rgba(255,255,255,0.15);
+  border: none; color: white;
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  font-family: var(--font-body); font-weight: 600; font-size: 13px;
+  cursor: pointer;
+  &:hover { background: rgba(255,255,255,0.25); }
+}
+
+.shell__content { flex: 1; padding: 32px; max-width: 1100px; width: 100%; margin: 0 auto; }

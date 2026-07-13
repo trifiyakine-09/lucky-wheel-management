@@ -1,0 +1,69 @@
+.page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+
+  h1 { color: var(--color-primary); font-size: 24px; margin: 0; }
+  .btn-pill { padding: 10px 18px; font-size: 14px; }
+}
+
+.empty-state { color: var(--color-muted); text-align: center; padding: 60px 20px; }
+
+.cadeaux-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.cadeau-card {
+  background: white; border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  transition: opacity 0.15s ease;
+
+  &--inactif { opacity: 0.5; }
+  &__swatch { height: 8px; }
+  &__body { padding: 16px; }
+
+  h3 { margin: 0 0 4px; font-size: 16px; }
+  &__desc { color: var(--color-muted); font-size: 13px; margin: 0 0 8px; }
+  &__stock { font-size: 13px; margin: 0; }
+  &__actions { display: flex; gap: 4px; padding: 8px 16px 16px; }
+}
+
+.icon-btn {
+  background: var(--color-page); border: none; border-radius: 8px;
+  width: 32px; height: 32px; cursor: pointer; font-size: 14px;
+  &:hover { background: #eee; }
+}
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+}
+
+.modal {
+  background: white; border-radius: var(--radius);
+  padding: 28px; width: 100%; max-width: 420px;
+
+  h2 { margin: 0 0 20px; color: var(--color-primary); font-size: 18px; }
+  form { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 13px; font-weight: 600; margin-top: 12px; }
+
+  input, textarea {
+    padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-family: var(--font-body); font-size: 14px;
+    &:focus { outline: 2px solid var(--color-accent); border-color: var(--color-accent); }
+  }
+  input[type="color"] { padding: 4px; height: 40px; cursor: pointer; }
+
+  &__actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+}
+
+.btn-ghost {
+  background: none; border: none; color: var(--color-muted);
+  font-family: var(--font-body); font-weight: 600; font-size: 14px;
+  cursor: pointer; padding: 10px 16px;
+}
+
+.form-error { color: var(--color-error); font-size: 13px; margin: 8px 0 0; }

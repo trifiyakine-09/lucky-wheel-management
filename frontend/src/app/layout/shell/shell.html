@@ -1,0 +1,22 @@
+<div class="shell">
+  <header class="shell__header">
+    <div class="shell__brand">
+      <span class="shell__brand-icon">🎡</span>
+      <span class="shell__brand-text">LUCKY WHEEL</span>
+    </div>
+
+    <nav class="shell__nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+      <a routerLink="/participants" routerLinkActive="active">Participants</a>
+      <a routerLink="/cadeaux" routerLinkActive="active">Cadeaux</a>
+      <a routerLink="/roue" routerLinkActive="active">Roue</a>
+      <a routerLink="/historique" routerLinkActive="active">Historique</a>
+    </nav>
+
+    <button type="button" class="shell__logout" (click)="logout()">Déconnexion</button>
+  </header>
+
+  <main class="shell__content">
+    <router-outlet />
+  </main>
+</div>

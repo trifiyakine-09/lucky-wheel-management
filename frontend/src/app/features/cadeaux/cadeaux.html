@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h1>Cadeaux</h1>
+  <button type="button" class="btn-pill" (click)="openCreate()">+ Ajouter un cadeau</button>
+</div>
+
+@if (cadeauxService.cadeaux().length === 0) {
+  <p class="empty-state">Aucun cadeau pour l'instant. Ajoute le premier cadeau à mettre en jeu.</p>
+}
+
+<div class="cadeaux-grid">
+  @for (cadeau of cadeauxService.cadeaux(); track cadeau.id) {
+    <div class="cadeau-card" [class.cadeau-card--inactif]="!cadeau.actif">
+      <div class="cadeau-card__swatch" [style.background]="cadeau.couleur || '#FFC72C'"></div>
+      <div class="cadeau-card__body">
+        <h3>{{ cadeau.nom }}</h3>
+        @if (cadeau.description) { <p class="cadeau-card__desc">{{ cadeau.description }}</p> }
+        <p class="cadeau-card__stock">Stock : <strong>{{ cadeau.quantite }}</strong></p>
+      </div>
+      <div class="cadeau-card__actions">
+        <button type="button" class="icon-btn" (click)="toggle(cadeau)" [title]="cadeau.actif ? 'Désactiver' : 'Activer'">
+          {{ cadeau.actif ? '✅' : '⛔' }}
+        </button>
+        <button type="button" class="icon-btn" (click)="openEdit(cadeau)" title="Modifier">✏️</button>
+        <button type="button" class="icon-btn" (click)="remove(cadeau)" title="Supprimer">🗑️</button>
+      </div>
+    </div>
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>{{ editingId() ? 'Modifier le cadeau' : 'Nouveau cadeau' }}</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>Nom</label>
+        <input type="text" formControlName="nom" placeholder="Powerbank" />
+
+        <label>Description</label>
+        <textarea formControlName="description" rows="2" placeholder="Optionnel"></textarea>
+
+        <label>Quantité disponible</label>
+        <input type="number" formControlName="quantite" min="0" />
+
+        <label>Couleur (segment de la roue)</label>
+        <input type="color" formControlName="couleur" />
+
+        @if (errorMessage()) { <p class="form-error">{{ errorMessage() }}</p> }
+
+        <div class="modal__actions">
+          <button type="button" class="btn-ghost" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="btn-pill" [disabled]="form.invalid || loading()">
+            {{ loading() ? 'Enregistrement...' : 'Enregistrer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
