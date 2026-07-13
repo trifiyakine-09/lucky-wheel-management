@@ -8,8 +8,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell/shell').then(m => m.Shell),
     children: [
-      { path: '', redirectTo: 'cadeaux', pathMatch: 'full' },
-      { path: 'dashboard', loadComponent: () => import('./features/coming-soon/coming-soon').then(m => m.ComingSoon), data: { title: 'Tableau de bord' } },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)},
       { path: 'participants', loadComponent: () => import('./features/participants/participants').then(m => m.Participants) },
       { path: 'cadeaux', loadComponent: () => import('./features/cadeaux/cadeaux').then(m => m.Cadeaux) },
       { path: 'roue', loadComponent: () => import('./features/roue/roue').then(m => m.Roue) },

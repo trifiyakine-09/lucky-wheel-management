@@ -1,0 +1,33 @@
+<h1>Tableau de bord</h1>
+
+@if (dashboardService.stats(); as stats) {
+  <div class="stats-grid">
+    <a routerLink="/participants" class="stat-card">
+      <span class="stat-card__icon">👥</span>
+      <strong>{{ stats.total_participants }}</strong>
+      <span>Participants</span>
+    </a>
+    <a routerLink="/historique" class="stat-card stat-card--accent">
+      <span class="stat-card__icon">🏆</span>
+      <strong>{{ stats.total_gagnants }}</strong>
+      <span>Gagnants</span>
+    </a>
+    <a routerLink="/participants" class="stat-card">
+      <span class="stat-card__icon">⏳</span>
+      <strong>{{ stats.participants_restants }}</strong>
+      <span>Participants restants</span>
+    </a>
+    <a routerLink="/cadeaux" class="stat-card">
+      <span class="stat-card__icon">🎁</span>
+      <strong>{{ stats.cadeaux_actifs }}</strong>
+      <span>Cadeaux actifs</span>
+    </a>
+    <a routerLink="/cadeaux" class="stat-card">
+      <span class="stat-card__icon">📦</span>
+      <strong>{{ stats.stock_restant }}</strong>
+      <span>Stock restant</span>
+    </a>
+  </div>
+} @else {
+  <p class="loading-state">Chargement des statistiques...</p>
+}

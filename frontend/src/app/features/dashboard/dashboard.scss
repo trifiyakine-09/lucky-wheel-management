@@ -1,0 +1,26 @@
+h1 { color: var(--color-primary); font-size: 24px; margin: 0 0 24px; }
+.loading-state { color: var(--color-muted); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+.stat-card {
+  background: white; border-radius: var(--radius); padding: 24px 20px; text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  text-decoration: none; color: inherit; display: block; cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.10); }
+
+  &__icon { font-size: 28px; display: block; margin-bottom: 10px; }
+  strong { display: block; font-size: 32px; font-weight: 800; color: var(--color-primary); font-family: var(--font-display); }
+  span { display: block; font-size: 13px; color: var(--color-muted); margin-top: 4px; }
+
+  &--accent {
+    background: var(--color-primary);
+    strong { color: white; }
+    span { color: rgba(255,255,255,0.85); }
+  }
+}
