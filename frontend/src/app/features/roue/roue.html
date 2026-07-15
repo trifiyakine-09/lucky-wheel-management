@@ -1,5 +1,10 @@
-<div class="roue-page">
-  <h1>Roue de la fortune</h1>
+<div class="roue-page" #roueContainer>
+  <div class="roue-header">
+    <h1>Roue de la fortune</h1>
+    <button type="button" class="icon-btn-fs" (click)="toggleFullscreen()" [title]="isFullscreen() ? 'Quitter le plein écran' : 'Plein écran'">
+      {{ isFullscreen() ? '⤡' : '⤢' }}
+    </button>
+  </div>
 
   @if (errorMessage(); as msg) {
     <div class="wheel-error">

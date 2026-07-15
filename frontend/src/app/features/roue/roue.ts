@@ -1,6 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, viewChild, ElementRef } from '@angular/core';
 import { CadeauxService } from '../cadeaux/cadeaux.service';
 import { RoueService, Gagnant } from './roue.service';
+import { WheelSoundService } from './wheel-sound.service';
 
 interface Segment {
   cadeau: { id: number; nom: string; couleur: string | null };
@@ -19,7 +20,7 @@ interface Segment {
 export class Roue implements OnInit {
   protected readonly cadeauxService = inject(CadeauxService);
   private readonly roueService = inject(RoueService);
-
+  
   readonly rotation = signal(0);
   readonly spinning = signal(false);
   readonly winner = signal<Gagnant | null>(null);
@@ -57,7 +58,22 @@ export class Roue implements OnInit {
 
   ngOnInit(): void {
     this.cadeauxService.load();
+    document.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
+
+  ngOnDestroy(): void {
+  document.removeEventListener('fullscreenchange', this.onFullscreenChange);
+}
+toggleFullscreen(): void {
+  const el = this.roueContainer()?.nativeElement;
+  if (!el) return;
+  if (!document.fullscreenElement) {
+    el.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
 
   private polarToCartesian(r: number, angleDeg: number) {
     const rad = (angleDeg * Math.PI) / 180;
@@ -109,6 +125,7 @@ export class Roue implements OnInit {
     if (delta < 0) delta += 360;
 
     this.rotation.update((r) => r + 6 * 360 + delta);
+    this.soundService.playTickSequence(5000);
 
     this.roueService.lancerTirage(targetCadeau.id).subscribe({
       next: (gagnant) => { this.apiResult = gagnant; this.tryReveal(); },
@@ -127,6 +144,7 @@ export class Roue implements OnInit {
     this.spinning.set(false);
     if (this.apiResult) {
       this.genererConfettis();
+      this.soundService.fanfare();
       this.winner.set(this.apiResult);
     } else {
       this.errorMessage.set(this.apiError);
@@ -149,4 +167,8 @@ export class Roue implements OnInit {
     this.winner.set(null);
     this.cadeauxService.load();
   }
+  private readonly soundService = inject(WheelSoundService);
+readonly roueContainer = viewChild<ElementRef<HTMLDivElement>>('roueContainer');
+readonly isFullscreen = signal(false);
+private readonly onFullscreenChange = () => this.isFullscreen.set(!!document.fullscreenElement);
 }
