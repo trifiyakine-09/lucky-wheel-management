@@ -7,6 +7,17 @@
       <strong>{{ stats.total_participants }}</strong>
       <span>Participants</span>
     </a>
+    @if (stats.gagnants_par_cadeau.length > 0) {
+  <h2 class="section-title">Répartition des gains par cadeau</h2>
+  <div class="repartition">
+    @for (c of stats.gagnants_par_cadeau; track c.nom) {
+      <div class="repartition__row">
+        <span class="cadeau-tag" [style.background]="c.couleur || '#FFC72C'">{{ c.nom }}</span>
+        <strong>{{ c.total }}</strong>
+      </div>
+    }
+  </div>
+}
     <a routerLink="/historique" class="stat-card stat-card--accent">
       <span class="stat-card__icon">🏆</span>
       <strong>{{ stats.total_gagnants }}</strong>

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { HistoriqueService } from './historique.service';
+import { Gagnant, HistoriqueService } from './historique.service';
 
 @Component({
   selector: 'app-historique',
@@ -36,4 +36,11 @@ export class Historique implements OnInit {
   exporter(): void {
     this.historiqueService.export(this.filtreForm.getRawValue());
   }
+  annuler(g: Gagnant): void {
+  if (!confirm(`Annuler ce tirage ?\n${g.participant.prenom} ${g.participant.nom} — ${g.cadeau.nom}\n\nLe participant redeviendra éligible et le stock sera restauré.`)) return;
+  this.historiqueService.annuler(g.id).subscribe({
+    next: () => this.filtrer(),
+    error: (err) => alert(err.error?.message ?? 'Annulation impossible.'),
+  });
+}
 }

@@ -1,0 +1,9 @@
+h1 { color: var(--color-primary); font-size: 24px; margin: 0 0 24px; }
+.empty-state { color: var(--color-muted); text-align: center; padding: 60px 20px; }
+.journal-table {
+  width: 100%; border-collapse: collapse; background: white;
+  border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  th, td { text-align: left; padding: 12px 16px; font-size: 14px; }
+  th { background: var(--color-page); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tbody tr:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
+}

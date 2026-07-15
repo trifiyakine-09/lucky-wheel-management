@@ -6,6 +6,7 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GagnantController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ActionLogController;
 
 Route::middleware('throttle:6,1')->group(function () {
     //{"email": "admin@aziza.tn", "password": "mdp123"}
@@ -37,4 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('gagnants/export', [GagnantController::class, 'export']);
 
     Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::delete('gagnants/{gagnant}', [GagnantController::class, 'destroy']);
+Route::get('logs', [ActionLogController::class, 'index']);
 });

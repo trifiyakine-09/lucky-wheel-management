@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cadeau;
 use Illuminate\Http\Request;
+use App\Models\ActionLog;
 
 class CadeauController extends Controller
 {
@@ -22,7 +23,11 @@ class CadeauController extends Controller
             'actif'       => 'boolean',
         ]);
 
-        return response()->json(Cadeau::create($validated), 201);
+        $cadeau = Cadeau::create($validated);
+
+        ActionLog::ecrire('cadeau_cree', $cadeau->nom, $request->user()?->id);
+
+        return response()->json($cadeau, 201);
     }
 
     public function show(Cadeau $cadeau)
@@ -41,24 +46,33 @@ class CadeauController extends Controller
         ]);
 
         $cadeau->update($validated);
+
+        ActionLog::ecrire('cadeau_modifie', $cadeau->nom, $request->user()?->id);
+
         return $cadeau;
     }
 
-public function destroy(Cadeau $cadeau)
-{
-    try {
-        $cadeau->delete();
-        return response()->json(['message' => 'Cadeau supprimé avec succès']);
-    } catch (\Illuminate\Database\QueryException $e) {
-        return response()->json([
-            'message' => 'Impossible de supprimer ce cadeau : il a déjà été attribué à un gagnant. Désactive-le plutôt.',
-        ], 409);
-    }
-}
+    public function destroy(Request $request, Cadeau $cadeau)
+    {
+        try {
+            $cadeau->delete();
 
-    public function toggle(Cadeau $cadeau)
+            ActionLog::ecrire('cadeau_supprime', $cadeau->nom, $request->user()?->id);
+
+            return response()->json(['message' => 'Cadeau supprimé avec succès']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Impossible de supprimer ce cadeau : il a déjà été attribué à un gagnant. Désactive-le plutôt.',
+            ], 409);
+        }
+    }
+
+    public function toggle(Request $request, Cadeau $cadeau)
     {
         $cadeau->update(['actif' => !$cadeau->actif]);
+
+        ActionLog::ecrire($cadeau->actif ? 'cadeau_active' : 'cadeau_desactive', $cadeau->nom, $request->user()?->id);
+
         return $cadeau;
     }
 }

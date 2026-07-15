@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
 
 export interface Gagnant {
   id: number;
@@ -43,4 +44,7 @@ export class HistoriqueService {
       window.URL.revokeObjectURL(url);
     });
   }
+  annuler(id: number): Observable<{ message: string }> {
+  return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+}
 }

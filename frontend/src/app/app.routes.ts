@@ -14,6 +14,7 @@ export const routes: Routes = [
       { path: 'cadeaux', loadComponent: () => import('./features/cadeaux/cadeaux').then(m => m.Cadeaux) },
       { path: 'roue', loadComponent: () => import('./features/roue/roue').then(m => m.Roue) },
       { path: 'historique', loadComponent: () => import('./features/historique/historique').then(m => m.Historique) },
+      { path: 'journal', loadComponent: () => import('./features/journal/journal').then(m => m.Journal) },
     ],
   },
   { path: '**', redirectTo: 'login' },

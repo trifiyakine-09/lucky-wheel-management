@@ -54,6 +54,7 @@ class ParticipantController extends Controller
                 $doublons++;
             }
         }
+        \App\Models\ActionLog::ecrire('import_participants', "{$importes} importé(s), {$doublons} doublon(s), {$invalides} invalide(s)", $request->user()?->id);
 
         return response()->json([
             'message'  => "{$importes} participant(s) importe(s), {$doublons} doublon(s) ignore(s), {$invalides} ligne(s) invalide(s).",
