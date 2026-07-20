@@ -39,5 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'index']);
     Route::delete('gagnants/{gagnant}', [GagnantController::class, 'destroy']);
-Route::get('logs', [ActionLogController::class, 'index']);
+    Route::get('logs', [ActionLogController::class, 'index']);
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+    Route::post('admins', [AuthController::class, 'register']);
 });

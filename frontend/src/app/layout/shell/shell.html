@@ -14,10 +14,83 @@
       <a routerLink="/journal" routerLinkActive="active">Journal</a>
     </nav>
 
-    <button type="button" class="shell__logout" (click)="logout()">Déconnexion</button>
+    <div class="profil">
+      <button type="button" class="profil__trigger" (click)="toggleMenu()">
+        <span class="profil__avatar">{{ authService.currentUser()?.name?.charAt(0) ?? '?' }}</span>
+      </button>
+
+      @if (menuOpen()) {
+        <div class="profil__backdrop" (click)="closeMenu()"></div>
+        <div class="profil__menu">
+          <div class="profil__identity">
+            <strong>{{ authService.currentUser()?.name }}</strong>
+            <span>{{ authService.currentUser()?.email }}</span>
+          </div>
+          <button type="button" (click)="openPasswordModal()">🔒 Modifier le mot de passe</button>
+          <button type="button" (click)="openAdminModal()">➕ Ajouter un administrateur</button>
+          <button type="button" (click)="goJournal()">📋 Journal des actions</button>
+          <hr />
+          <button type="button" class="profil__logout" (click)="logout()">🚪 Déconnexion</button>
+        </div>
+      }
+    </div>
   </header>
 
   <main class="shell__content">
     <router-outlet />
   </main>
 </div>
+
+@if (showPasswordModal()) {
+  <div class="modal-backdrop" (click)="closeModals()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Modifier le mot de passe</h2>
+      <form [formGroup]="passwordForm" (ngSubmit)="submitPassword()">
+        <label>Mot de passe actuel</label>
+        <input type="password" formControlName="current_password" />
+        <label>Nouveau mot de passe</label>
+        <input type="password" formControlName="password" />
+        <label>Confirmer le nouveau mot de passe</label>
+        <input type="password" formControlName="password_confirmation" />
+
+        @if (feedback(); as f) { <p [class]="'form-feedback form-feedback--' + f.type">{{ f.text }}</p> }
+
+        <div class="modal__actions">
+          <button type="button" class="btn-ghost" (click)="closeModals()">Fermer</button>
+          <button type="submit" class="btn-pill" [disabled]="passwordForm.invalid || loading()">
+            {{ loading() ? 'Enregistrement...' : 'Enregistrer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showAdminModal()) {
+  <div class="modal-backdrop" (click)="closeModals()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>Ajouter un administrateur</h2>
+      <form [formGroup]="adminForm" (ngSubmit)="submitAdmin()">
+        <label>Nom</label>
+        <input type="text" formControlName="name" />
+        <label>Email</label>
+        <input type="email" formControlName="email" />
+        <label>Téléphone (format international)</label>
+        <input type="text" formControlName="telephone" placeholder="+216XXXXXXXX" />
+        <label>Mot de passe</label>
+        <input type="password" formControlName="password" />
+        <label>Confirmer le mot de passe</label>
+        <input type="password" formControlName="password_confirmation" />
+
+        @if (feedback(); as f) { <p [class]="'form-feedback form-feedback--' + f.type">{{ f.text }}</p> }
+
+        <div class="modal__actions">
+          <button type="button" class="btn-ghost" (click)="closeModals()">Fermer</button>
+          <button type="submit" class="btn-pill" [disabled]="adminForm.invalid || loading()">
+            {{ loading() ? 'Création...' : 'Créer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

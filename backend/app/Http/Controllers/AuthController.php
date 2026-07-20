@@ -107,4 +107,48 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Deconnecte.']);
     }
+    public function changePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $user = $request->user();
+
+    if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+        return response()->json(['message' => 'Le mot de passe actuel est incorrect.'], 422);
+    }
+
+    if (\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Le nouveau mot de passe doit être différent de l\'ancien.'], 422);
+    }
+
+    $user->password = $request->password;
+    $user->save();
+
+    \App\Models\ActionLog::ecrire('mdp_modifie', $user->name, $user->id);
+
+    return response()->json(['message' => 'Mot de passe modifié avec succès.']);
+}
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'telephone' => 'required|string|max:20',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'telephone' => $request->telephone,
+        'password' => $request->password,
+    ]);
+
+    \App\Models\ActionLog::ecrire('admin_cree', $user->name, $request->user()?->id);
+
+    return response()->json($user, 201);
+}
 }

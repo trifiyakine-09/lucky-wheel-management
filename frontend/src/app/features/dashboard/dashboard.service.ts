@@ -7,8 +7,6 @@ export interface DashboardStats {
   participants_restants: number;
   cadeaux_actifs: number;
   stock_restant: number;
-  gagnants_par_cadeau: { nom: string; couleur: string | null; total: number }[];
-  tirages_par_jour: { jour: string; total: number }[];
 }
 
 @Injectable({ providedIn: 'root' })
