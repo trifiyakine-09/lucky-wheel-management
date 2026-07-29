@@ -58,6 +58,9 @@ export class Participants implements OnInit {
 
   upload(): void {
     if (!this.selectedFile) return;
+     if (!confirm('Cet import va retirer les participants actuels qui n\'ont pas encore gagné. Les gagnants restent conservés dans l\'historique. Continuer ?')) {
+    return;
+  }
     this.uploading.set(true);
     this.errorMessage.set(null);
     this.importResult.set(null);

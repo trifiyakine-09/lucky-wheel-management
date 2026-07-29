@@ -44,3 +44,4 @@
   th { background: var(--color-page); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
   tbody tr:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
 }
+.import-summary__item--neutral { background: #F0F0F0; strong { color: var(--color-muted); } }

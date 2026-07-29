@@ -19,14 +19,14 @@
 
   @if (errorMessage()) { <p class="import-card__error">{{ errorMessage() }}</p> }
 
-  @if (importResult(); as result) {
-    <div class="import-summary">
-      <div class="import-summary__item import-summary__item--ok"><strong>{{ result.importes }}</strong><span>importé(s)</span></div>
-      <div class="import-summary__item import-summary__item--warn"><strong>{{ result.doublons }}</strong><span>doublon(s)</span></div>
-      <div class="import-summary__item import-summary__item--error"><strong>{{ result.invalides }}</strong><span>invalide(s)</span></div>
-    </div>
-  }
-</div>
+    @if (importResult(); as result) {
+      <div class="import-summary">
+        <div class="import-summary__item import-summary__item--ok"><strong>{{ result.importes }}</strong><span>importé(s)</span></div>
+        <div class="import-summary__item import-summary__item--warn"><strong>{{ result.doublons }}</strong><span>doublon(s)</span></div>
+        <div class="import-summary__item import-summary__item--error"><strong>{{ result.invalides }}</strong><span>invalide(s)</span></div>
+      </div>
+    }
+</div>  
 
 <div class="filtre-tabs">
   <button type="button" [class.active]="filtre() === 'tous'" (click)="changerFiltre('tous')">Tous</button>
