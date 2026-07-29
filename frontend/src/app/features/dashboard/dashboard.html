@@ -12,7 +12,7 @@
       <strong>{{ stats.total_gagnants }}</strong>
       <span>Gagnants</span>
     </a>
-    <a routerLink="/participants" class="stat-card">
+    <a routerLink="/participants" [queryParams]="{ filtre: 'restants' }" class="stat-card">
       <span class="stat-card__icon">⏳</span>
       <strong>{{ stats.participants_restants }}</strong>
       <span>Participants restants</span>

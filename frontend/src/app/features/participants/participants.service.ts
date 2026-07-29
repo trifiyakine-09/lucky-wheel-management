@@ -7,6 +7,7 @@ export interface Participant {
   nom: string;
   prenom: string;
   telephone: string;
+  a_gagne: boolean;
   created_at: string;
 }
 

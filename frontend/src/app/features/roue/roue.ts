@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed, viewChild, ElementRef } fr
 import { CadeauxService } from '../cadeaux/cadeaux.service';
 import { RoueService, Gagnant } from './roue.service';
 import { WheelSoundService } from './wheel-sound.service';
+import { DashboardService } from '../dashboard/dashboard.service';  
 
 interface Segment {
   cadeau: { id: number; nom: string; couleur: string | null };
@@ -20,6 +21,9 @@ interface Segment {
 export class Roue implements OnInit {
   protected readonly cadeauxService = inject(CadeauxService);
   private readonly roueService = inject(RoueService);
+  private readonly dashboardService = inject(DashboardService);
+
+readonly participantsRestants = computed(() => this.dashboardService.stats()?.participants_restants ?? null);
   
   readonly rotation = signal(0);
   readonly spinning = signal(false);
@@ -58,6 +62,7 @@ export class Roue implements OnInit {
 
   ngOnInit(): void {
     this.cadeauxService.load();
+    this.dashboardService.load();
     document.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
 
@@ -105,7 +110,7 @@ toggleFullscreen(): void {
 
   lancer(): void {
     const liste = this.cadeauxActifs();
-    if (liste.length === 0 || this.spinning()) return;
+    if (liste.length === 0 || this.spinning() || this.participantsRestants() === 0) return;
 
     this.spinning.set(true);
     this.winner.set(null);
@@ -166,6 +171,7 @@ toggleFullscreen(): void {
   fermerResultat(): void {
     this.winner.set(null);
     this.cadeauxService.load();
+    this.dashboardService.load();
   }
   private readonly soundService = inject(WheelSoundService);
 readonly roueContainer = viewChild<ElementRef<HTMLDivElement>>('roueContainer');

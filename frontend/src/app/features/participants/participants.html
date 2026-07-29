@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1>Participants</h1>
-  <span class="participants-count">{{ participantsService.participants().length }} participant(s)</span>
+  <span class="participants-count">{{ participantsAffiches().length }} / {{ participantsService.participants().length }} participant(s)</span>
 </div>
 
 <div class="import-card">
@@ -28,17 +28,30 @@
   }
 </div>
 
-@if (participantsService.participants().length === 0) {
-  <p class="empty-state">Aucun participant importé pour l'instant.</p>
+<div class="filtre-tabs">
+  <button type="button" [class.active]="filtre() === 'tous'" (click)="changerFiltre('tous')">Tous</button>
+  <button type="button" [class.active]="filtre() === 'restants'" (click)="changerFiltre('restants')">En attente de tirage</button>
+  <button type="button" [class.active]="filtre() === 'gagnants'" (click)="changerFiltre('gagnants')">Ont déjà gagné</button>
+</div>
+
+@if (participantsAffiches().length === 0) {
+  <p class="empty-state">Aucun participant dans cette catégorie.</p>
 } @else {
   <table class="participants-table">
-    <thead><tr><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Ajouté le</th></tr></thead>
+    <thead><tr><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Statut</th><th>Ajouté le</th></tr></thead>
     <tbody>
-      @for (p of participantsService.participants(); track p.id) {
-        <tr>
+      @for (p of participantsAffiches(); track p.id) {
+        <tr [class.ligne-restant]="!p.a_gagne">
           <td>{{ p.nom }}</td>
           <td>{{ p.prenom }}</td>
           <td>{{ p.telephone }}</td>
+          <td>
+            @if (p.a_gagne) {
+              <span class="statut statut--gagne">🏆 A gagné</span>
+            } @else {
+              <span class="statut statut--attente">En attente</span>
+            }
+          </td>
           <td>{{ p.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
         </tr>
       }

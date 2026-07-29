@@ -9,9 +9,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class ParticipantController extends Controller
 {
     public function index()
-    {
-        return Participant::orderBy('created_at', 'desc')->get();
-    }
+{
+    return Participant::withExists('gagnant as a_gagne')->orderBy('created_at', 'desc')->get();
+}
 
     public function import(Request $request)
     {

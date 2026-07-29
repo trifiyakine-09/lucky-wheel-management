@@ -21,6 +21,8 @@ export class Journal implements OnInit {
     cadeau_active: '✅ Cadeau activé',
     cadeau_desactive: '⛔ Cadeau désactivé',
     import_participants: '📥 Import de participants',
+    admin_cree: '➕ Administrateur créé',
+    mdp_modifie: '🔒 Mot de passe modifié',
   };
 
   ngOnInit(): void {

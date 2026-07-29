@@ -1,6 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { ParticipantsService, ImportResult } from './participants.service';
+
+type Filtre = 'tous' | 'restants' | 'gagnants';
 
 @Component({
   selector: 'app-participants',
@@ -11,16 +14,37 @@ import { ParticipantsService, ImportResult } from './participants.service';
 })
 export class Participants implements OnInit {
   protected readonly participantsService = inject(ParticipantsService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly uploading = signal(false);
   readonly importResult = signal<ImportResult | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly selectedFileName = signal<string | null>(null);
+  readonly filtre = signal<Filtre>('tous');
 
   private selectedFile: File | null = null;
 
+  readonly participantsAffiches = computed(() => {
+    const liste = this.participantsService.participants();
+    switch (this.filtre()) {
+      case 'restants': return liste.filter((p) => !p.a_gagne);
+      case 'gagnants': return liste.filter((p) => p.a_gagne);
+      default: return liste;
+    }
+  });
+
   ngOnInit(): void {
-    this.participantsService.load();
+  this.participantsService.load();
+  this.route.queryParamMap.subscribe((params) => {
+    const filtreUrl = params.get('filtre');
+    if (filtreUrl === 'restants' || filtreUrl === 'gagnants') {
+      this.filtre.set(filtreUrl);
+    }
+  });
+}
+
+  changerFiltre(f: Filtre): void {
+    this.filtre.set(f);
   }
 
   onFileSelected(event: Event): void {
