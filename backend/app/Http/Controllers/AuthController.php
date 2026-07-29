@@ -77,30 +77,34 @@ class AuthController extends Controller
         return response()->json(['message' => "Code de reinitialisation envoye {$label}."]);
     }
 
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'otp' => 'required',
-            'password' => 'required|min:8|confirmed',
-        ]);
+   public function resetPassword(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'otp' => 'required',
+        'password' => 'required|min:8|confirmed',
+    ]);
 
-        $user = User::where('email', $request->email)
-            ->where('otp_code', $request->otp)
-            ->where('otp_expires_at', '>', now())
-            ->first();
+    $user = User::where('email', $request->email)
+        ->where('otp_code', $request->otp)
+        ->where('otp_expires_at', '>', now())
+        ->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Code invalide ou expire.'], 422);
-        }
-
-        $user->password = $request->password;
-        $user->otp_code = null;
-        $user->otp_expires_at = null;
-        $user->save();
-
-        return response()->json(['message' => 'Mot de passe reinitialise avec succes.']);
+    if (!$user) {
+        return response()->json(['message' => 'Code invalide ou expire.'], 422);
     }
+
+    if (\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Le nouveau mot de passe doit être différent de l\'ancien.'], 422);
+    }
+
+    $user->password = $request->password;
+    $user->otp_code = null;
+    $user->otp_expires_at = null;
+    $user->save();
+
+    return response()->json(['message' => 'Mot de passe reinitialise avec succes.']);
+}
 
     public function logout(Request $request)
     {
