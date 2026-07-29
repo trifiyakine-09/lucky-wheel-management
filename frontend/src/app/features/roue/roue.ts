@@ -3,6 +3,7 @@ import { CadeauxService } from '../cadeaux/cadeaux.service';
 import { RoueService, Gagnant } from './roue.service';
 import { WheelSoundService } from './wheel-sound.service';
 import { DashboardService } from '../dashboard/dashboard.service';  
+import { ParticipantsService } from '../participants/participants.service';
 
 interface Segment {
   cadeau: { id: number; nom: string; couleur: string | null };
@@ -22,6 +23,12 @@ export class Roue implements OnInit {
   protected readonly cadeauxService = inject(CadeauxService);
   private readonly roueService = inject(RoueService);
   private readonly dashboardService = inject(DashboardService);
+  protected readonly participantsService = inject(ParticipantsService);
+readonly showParticipants = signal(false);
+
+readonly participantsEligibles = computed(() =>
+  this.participantsService.participants().filter((p) => !p.a_gagne)
+);
 
 readonly participantsRestants = computed(() => this.dashboardService.stats()?.participants_restants ?? null);
   
@@ -63,8 +70,12 @@ readonly participantsRestants = computed(() => this.dashboardService.stats()?.pa
   ngOnInit(): void {
     this.cadeauxService.load();
     this.dashboardService.load();
+    this.participantsService.load();
     document.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
+  toggleParticipants(): void {
+  this.showParticipants.update((v) => !v);
+}
 
   ngOnDestroy(): void {
   document.removeEventListener('fullscreenchange', this.onFullscreenChange);
@@ -172,6 +183,7 @@ toggleFullscreen(): void {
     this.winner.set(null);
     this.cadeauxService.load();
     this.dashboardService.load();
+    this.participantsService.load();
   }
   private readonly soundService = inject(WheelSoundService);
 readonly roueContainer = viewChild<ElementRef<HTMLDivElement>>('roueContainer');
