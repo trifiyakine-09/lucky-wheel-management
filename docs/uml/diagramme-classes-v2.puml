@@ -1,4 +1,4 @@
-@startuml diagramme-classes-v2
+@startuml diagramme-classes-v3
 skinparam shadowing false
 skinparam defaultFontName DejaVu Sans
 skinparam classAttributeIconSize 0
@@ -15,6 +15,7 @@ class Participant {
   +nom : string
   +prenom : string
   +telephone : string {unique}
+  +actif : boolean
   +created_at : datetime
 }
 
@@ -41,12 +42,23 @@ class User {
   +name : string
   +email : string {unique}
   +password : string
+  +telephone : string {nullable}
+  +otp_code : string {nullable}
+  +otp_expires_at : datetime {nullable}
+  +created_at : datetime
+}
+
+class ActionLog {
+  +id : bigint
+  +user_id : bigint {nullable}
+  +action : string
+  +details : string {nullable}
   +created_at : datetime
 }
 
 Participant "1" -- "0..1" Gagnant : remporte >
 Cadeau "1" -- "0..*" Gagnant : attribué via
 User "0..1" -- "0..*" Gagnant : lance >
-
+User "0..1" -- "0..*" ActionLog : trace >
 
 @enduml

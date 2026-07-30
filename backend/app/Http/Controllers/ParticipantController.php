@@ -34,6 +34,10 @@ class ParticipantController extends Controller
         $importes = 0;
         $doublons = 0;
         $invalides = 0;
+
+        /*une question posée à la base de données coûte cher à cause du trajet réseau
+         (même en local, il y a un aller-retour) ; une comparaison entre deux valeurs déjà 
+         en mémoire ne coûte presque rien,*/
         $telephonesExistants = Participant::pluck('telephone')->toArray();
 
         foreach ($lignes as $ligne) {
