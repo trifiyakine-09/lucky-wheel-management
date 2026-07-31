@@ -29,11 +29,10 @@ lucky-wheel-management/
 ├── frontend/           # Application Angular
 ├── docs/
 │   ├── journal/        # Journal de bord quotidien
-│   ├── meeting-notes/  # Comptes rendus avec l'encadrant
 │   ├── rapport/        # Rapport de stage
-│   ├── screenshots/    # Captures d'écran (rapport & README)
 │   ├── demo-data/      # Jeux de données fictifs pour les tests
-│   └── uml/            # Diagrammes (cas d'utilisation, classes, séquence)
+│   └── uml/            # Diagrammes (cas d'utilisation,classes,Architecture)
+│   └── manuel-utilisateur    #manuel-utilisateur
 ├── .gitignore
 └── README.md
 
@@ -65,6 +64,6 @@ Aucune liste réelle de participants (noms, numéros de téléphone) ne doit êt
 
 👤 Auteur
 
-[Trifi Yakine] — Stagiaire chez AZIZA
-Encadrant : [Med Ali Ben Taher]
+Trifi Yakine— Stagiaire chez AZIZA
+Encadrant : Wael Gazzahi
 Période : Juillet 2026
