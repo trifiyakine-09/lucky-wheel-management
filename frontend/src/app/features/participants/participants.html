@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1>Participants</h1>
-  <span class="participants-count">{{ participantsAffiches().length }} / {{ participantsService.participants().length }} participant(s)</span>
+  <span class="participants-count">{{ participantsService.total() }} participant(s) au total</span>
 </div>
 
 <div class="import-card">
@@ -19,14 +19,15 @@
 
   @if (errorMessage()) { <p class="import-card__error">{{ errorMessage() }}</p> }
 
-    @if (importResult(); as result) {
-      <div class="import-summary">
-        <div class="import-summary__item import-summary__item--ok"><strong>{{ result.importes }}</strong><span>importé(s)</span></div>
-        <div class="import-summary__item import-summary__item--warn"><strong>{{ result.doublons }}</strong><span>doublon(s)</span></div>
-        <div class="import-summary__item import-summary__item--error"><strong>{{ result.invalides }}</strong><span>invalide(s)</span></div>
-      </div>
-    }
-</div>  
+  @if (importResult(); as result) {
+    <div class="import-summary">
+      <div class="import-summary__item import-summary__item--ok"><strong>{{ result.importes }}</strong><span>importé(s)</span></div>
+      <div class="import-summary__item import-summary__item--warn"><strong>{{ result.doublons }}</strong><span>doublon(s)</span></div>
+      <div class="import-summary__item import-summary__item--error"><strong>{{ result.invalides }}</strong><span>invalide(s)</span></div>
+      <div class="import-summary__item import-summary__item--neutral"><strong>{{ result.retires }}</strong><span>retiré(s)</span></div>
+    </div>
+  }
+</div>
 
 <div class="filtre-tabs">
   <button type="button" [class.active]="filtre() === 'tous'" (click)="changerFiltre('tous')">Tous</button>
@@ -34,27 +35,34 @@
   <button type="button" [class.active]="filtre() === 'gagnants'" (click)="changerFiltre('gagnants')">Ont déjà gagné</button>
 </div>
 
-@if (participantsAffiches().length === 0) {
+@if (participantsService.participants().length === 0) {
   <p class="empty-state">Aucun participant dans cette catégorie.</p>
 } @else {
   <table class="participants-table">
     <thead><tr><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Statut</th><th>Ajouté le</th></tr></thead>
     <tbody>
-      @for (p of participantsAffiches(); track p.id) {
+      @for (p of participantsService.participants(); track p.id) {
         <tr [class.ligne-restant]="!p.a_gagne">
           <td>{{ p.nom }}</td>
           <td>{{ p.prenom }}</td>
           <td>{{ p.telephone }}</td>
           <td>
-            @if (p.a_gagne) {
-              <span class="statut statut--gagne">🏆 A gagné</span>
-            } @else {
-              <span class="statut statut--attente">En attente</span>
-            }
+            @if (p.a_gagne) { <span class="statut statut--gagne">🏆 A gagné</span> }
+            @else { <span class="statut statut--attente">En attente</span> }
           </td>
           <td>{{ p.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
         </tr>
       }
     </tbody>
   </table>
+
+  <div class="pagination">
+    <button type="button" (click)="pagePrecedente()" [disabled]="participantsService.currentPage() <= 1">← Précédent</button>
+    <span>
+      Page
+      <input type="number" [value]="participantsService.currentPage()" (change)="allerALaPage($any($event.target).valueAsNumber)" min="1" [max]="participantsService.lastPage()" class="pagination__input" />
+      / {{ participantsService.lastPage() }}
+    </span>
+    <button type="button" (click)="pageSuivante()" [disabled]="participantsService.currentPage() >= participantsService.lastPage()">Suivant →</button>
+  </div>
 }

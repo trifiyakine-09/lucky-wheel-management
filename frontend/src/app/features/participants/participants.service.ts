@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Participant {
@@ -16,6 +16,14 @@ export interface ImportResult {
   importes: number;
   doublons: number;
   invalides: number;
+  retires: number;
+}
+
+interface PaginatedResponse {
+  data: Participant[];
+  current_page: number;
+  last_page: number;
+  total: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,9 +32,20 @@ export class ParticipantsService {
   private readonly http = inject(HttpClient);
 
   readonly participants = signal<Participant[]>([]);
+  readonly currentPage = signal(1);
+  readonly lastPage = signal(1);
+  readonly total = signal(0);
 
-  load(): void {
-    this.http.get<Participant[]>(this.apiUrl).subscribe((data) => this.participants.set(data));
+  load(page: number = 1, filtre: string = 'tous'): void {
+    let params = new HttpParams().set('page', page).set('per_page', 25);
+    if (filtre !== 'tous') params = params.set('filtre', filtre);
+
+    this.http.get<PaginatedResponse>(this.apiUrl, { params }).subscribe((res) => {
+      this.participants.set(res.data);
+      this.currentPage.set(res.current_page);
+      this.lastPage.set(res.last_page);
+      this.total.set(res.total);
+    });
   }
 
   importFile(file: File): Observable<ImportResult> {

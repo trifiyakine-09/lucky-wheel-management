@@ -45,3 +45,21 @@
   tbody tr:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
 }
 .import-summary__item--neutral { background: #F0F0F0; strong { color: var(--color-muted); } }
+.pagination {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-top: 20px; padding: 16px;
+
+  button {
+    background: white; border: 1px solid #e0e0e0; border-radius: var(--radius-pill);
+    padding: 8px 18px; font-family: var(--font-body); font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    &:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+  span { font-size: 13px; color: var(--color-muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+}
+
+.pagination__input {
+  width: 55px; text-align: center; padding: 4px; border: 1px solid #e0e0e0; border-radius: 6px;
+  font-family: var(--font-body); font-size: 13px;
+}

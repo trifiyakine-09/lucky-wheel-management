@@ -14,6 +14,11 @@
   position: relative; z-index: 2;
 }
 
+.participants-count-badge {
+  text-align: center; margin-top: 24px;
+  color: var(--color-muted); font-size: 14px; font-weight: 600;
+}
+
 .wheel {
   width: min(400px, 90vw);
   height: min(400px, 90vw);

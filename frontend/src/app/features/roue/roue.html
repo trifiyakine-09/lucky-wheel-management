@@ -41,24 +41,9 @@
      <button type="button" class="btn-pill wheel-launch" (click)="lancer()" [disabled]="spinning() || participantsRestants() === 0">
       {{ spinning() ? 'Ça tourne...' : (participantsRestants() === 0 ? 'Aucun participant restant' : 'Lancer le tirage') }}
     </button>
-    <div class="participants-panel">
-      <button type="button" class="participants-panel__toggle" (click)="toggleParticipants()">
-        👥 {{ participantsEligibles().length }} participant(s) éligible(s)
-        <span class="chevron" [class.chevron--open]="showParticipants()">▾</span>
-      </button>
-
-      @if (showParticipants()) {
-        @if (participantsEligibles().length === 0) {
-          <p class="participants-panel__empty">Aucun participant éligible pour l'instant.</p>
-        } @else {
-          <div class="participants-panel__grid">
-            @for (p of participantsEligibles(); track p.id) {
-              <span class="participant-chip">{{ p.prenom }} {{ p.nom }}</span>
-            }
-          </div>
-        }
-      }
-    </div>
+    <div class="participants-count-badge">
+  👥 {{ participantsRestants() ?? '...' }} participant(s) éligible(s)
+</div>
   }
 
 

@@ -1,6 +1,5 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { ParticipantsService, ImportResult } from './participants.service';
 
 type Filtre = 'tous' | 'restants' | 'gagnants';
@@ -14,7 +13,6 @@ type Filtre = 'tous' | 'restants' | 'gagnants';
 })
 export class Participants implements OnInit {
   protected readonly participantsService = inject(ParticipantsService);
-  private readonly route = inject(ActivatedRoute);
 
   readonly uploading = signal(false);
   readonly importResult = signal<ImportResult | null>(null);
@@ -24,27 +22,30 @@ export class Participants implements OnInit {
 
   private selectedFile: File | null = null;
 
-  readonly participantsAffiches = computed(() => {
-    const liste = this.participantsService.participants();
-    switch (this.filtre()) {
-      case 'restants': return liste.filter((p) => !p.a_gagne);
-      case 'gagnants': return liste.filter((p) => p.a_gagne);
-      default: return liste;
-    }
-  });
-
   ngOnInit(): void {
-  this.participantsService.load();
-  this.route.queryParamMap.subscribe((params) => {
-    const filtreUrl = params.get('filtre');
-    if (filtreUrl === 'restants' || filtreUrl === 'gagnants') {
-      this.filtre.set(filtreUrl);
-    }
-  });
-}
+    this.participantsService.load(1, this.filtre());
+  }
 
   changerFiltre(f: Filtre): void {
     this.filtre.set(f);
+    this.participantsService.load(1, f);
+  }
+
+  pageSuivante(): void {
+    if (this.participantsService.currentPage() < this.participantsService.lastPage()) {
+      this.participantsService.load(this.participantsService.currentPage() + 1, this.filtre());
+    }
+  }
+
+  pagePrecedente(): void {
+    if (this.participantsService.currentPage() > 1) {
+      this.participantsService.load(this.participantsService.currentPage() - 1, this.filtre());
+    }
+  }
+
+  allerALaPage(page: number): void {
+    const p = Math.max(1, Math.min(page, this.participantsService.lastPage()));
+    this.participantsService.load(p, this.filtre());
   }
 
   onFileSelected(event: Event): void {
@@ -58,9 +59,8 @@ export class Participants implements OnInit {
 
   upload(): void {
     if (!this.selectedFile) return;
-     if (!confirm('Cet import va retirer les participants actuels qui n\'ont pas encore gagné. Les gagnants restent conservés dans l\'historique. Continuer ?')) {
-    return;
-  }
+    if (!confirm('Cet import va retirer les participants actuels qui n\'ont pas encore gagné. Les gagnants restent conservés dans l\'historique. Continuer ?')) return;
+
     this.uploading.set(true);
     this.errorMessage.set(null);
     this.importResult.set(null);
@@ -71,7 +71,7 @@ export class Participants implements OnInit {
         this.importResult.set(result);
         this.selectedFile = null;
         this.selectedFileName.set(null);
-        this.participantsService.load();
+        this.participantsService.load(1, this.filtre());
       },
       error: (err) => {
         this.uploading.set(false);
