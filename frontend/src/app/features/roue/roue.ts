@@ -97,11 +97,21 @@ toggleFullscreen(): void {
   }
 
   private slicePath(startAngle: number, endAngle: number): string {
+    // Cas particulier : un seul cadeau actif = un cercle complet (360°).
+    // Un arc SVG unique de 360° est degenere (point de depart = point d'arrivee),
+    // ce qui empeche certains navigateurs de le remplir. On dessine alors
+    // le cercle en deux demi-cercles distincts, qui ne sont jamais degeneres.
+    if (endAngle - startAngle >= 360) {
+        const debut = this.polarToCartesian(190, startAngle);
+        const milieu = this.polarToCartesian(190, startAngle + 180);
+        return `M ${debut.x} ${debut.y} A 190 190 0 1 1 ${milieu.x} ${milieu.y} A 190 190 0 1 1 ${debut.x} ${debut.y} Z`;
+    }
+
     const start = this.polarToCartesian(190, startAngle);
     const end = this.polarToCartesian(190, endAngle);
     const largeArc = endAngle - startAngle > 180 ? 1 : 0;
     return `M 200 200 L ${start.x} ${start.y} A 190 190 0 ${largeArc} 1 ${end.x} ${end.y} Z`;
-  }
+}
 
   private labelTransform(midAngle: number): string {
     const pos = this.polarToCartesian(190 * 0.62, midAngle);
