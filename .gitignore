@@ -5,4 +5,5 @@ backend/storage/
 frontend/node_modules/
 
 .DS_Store
-Thumbs.db
+Thumbs.dbfichiers.txt
+verif.txt
